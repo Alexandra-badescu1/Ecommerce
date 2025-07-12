@@ -30,15 +30,14 @@ public class JWTService {
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
-                .claims()
-                .add(claims)
+                .claim("username", username)  // Înlocuiește `setClaims()` cu `claim()`
                 .subject(username)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .issuedAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-                .and()
+                .issuedAt(new Date(System.currentTimeMillis()))  // Folosește `setIssuedAt()`
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))  // Folosește `setExpiration()`
                 .signWith(getkey())
                 .compact();
     }
+
 
     private SecretKey getkey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretkey);
