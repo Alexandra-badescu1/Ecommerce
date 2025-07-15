@@ -57,7 +57,7 @@ const Navbar = ({ onSelectCategory }) => {
       <nav className="navbar navbar-expand-lg fixed-top">
         <div className="container-fluid">
         <a className="navbar-brand" href="/">
-            <img src="logo.png" alt="Logo" style={{ height: "40px" }} />
+            <img src="src\public\shop-lock-solid.svg" alt="Logo" style={{ height: "40px" }} />
           </a>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
             <span className="navbar-toggler-icon"></span>
@@ -84,18 +84,31 @@ const Navbar = ({ onSelectCategory }) => {
               </li>
 
               {user ? (
-                <>
-                  <li className="nav-item"><a className="nav-link" href="/profile">Profile</a></li>
-                  <li className="nav-item">
-                    <button className="nav-link btn btn-link" onClick={logout}>Logout</button>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li className="nav-item"><a className="nav-link" href="/signup">Sign Up</a></li>
-                  <li className="nav-item"><a className="nav-link" href="/login">Log In</a></li>
-                </>
-              )}
+                  <>
+                    <li className="nav-item">
+                      <a className="nav-link" href="/profile">Profile</a>
+                    </li>
+
+                    {/* Extra buttons for Admin/Antreprenor */}
+                    {(user.role === "ADMIN" || user.role === "ENTREPRENEUR") && (
+                      <>
+                        <li className="nav-item">
+                          <a className="nav-link" href="/add_product">Add Product</a>
+                        </li>
+                      </>
+                    )}
+
+                    <li className="nav-item">
+                      <button className="nav-link btn btn-link" onClick={logout}>Logout</button>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li className="nav-item"><a className="nav-link" href="/signup">Sign Up</a></li>
+                    <li className="nav-item"><a className="nav-link" href="/login">Log In</a></li>
+                  </>
+                )}
+
             </ul>
 
             <button className="theme-btn" onClick={toggleTheme}>

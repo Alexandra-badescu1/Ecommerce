@@ -4,19 +4,26 @@ import ecom_project.demo.Model.User;
 import ecom_project.demo.Model.UserPrincipales;
 import ecom_project.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MyUserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
+
     @Autowired
     private UserRepository userRepository;
+
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if(user == null)
-            throw new UsernameNotFoundException("User 404");
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
         return new UserPrincipales(user);
     }
 }
+

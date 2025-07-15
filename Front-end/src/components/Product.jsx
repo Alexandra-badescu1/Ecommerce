@@ -6,7 +6,7 @@ import axios from "../axios";
 import UpdateProduct from "./UpdateProduct";
 const Product = () => {
   const { id } = useParams();
-  const { data, addToCart, removeFromCart, cart, refreshData } =
+  const { data, addToCart, removeFromCart, cart, refreshData, user } =
     useContext(AppContext);
   const [product, setProduct] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
@@ -37,23 +37,26 @@ const Product = () => {
 
     fetchProduct();
   }, [id]);
+ 
 
-  const deleteProduct = async () => {
-    try {
-      await axios.delete(`http://localhost:8080/api/delete/${id}`);
-      removeFromCart(id);
-      console.log("Product deleted successfully");
-      alert("Product deleted successfully");
-      refreshData();
-      navigate("/");
-    } catch (error) {
-      console.error("Error deleting product:", error);
-    }
-  };
+const handleEditClick = (e) => {
+  e.stopPropagation(); // Prevent triggering parent div's onClick
+  navigate(`/product/update/${id}`);
+};
 
-  const handleEditClick = () => {
-    navigate(`/product/update/${id}`);
-  };
+const deleteProduct = async (e) => {
+  e.stopPropagation(); // Prevent triggering parent div's onClick
+  try {
+    await axios.delete(`http://localhost:8080/api/delete/${id}`);
+    removeFromCart(id);
+    alert("Product deleted successfully");
+    refreshData();
+    navigate("/");
+  } catch (error) {
+    console.error("Error deleting product:", error);
+  }
+};
+
 
   const handlAddToCart = () => {
     addToCart(product);
@@ -68,7 +71,15 @@ const Product = () => {
   }
   return (
     <>
-      <div className="containers" style={{ display: "flex" }}>
+      <div
+          className="containers"
+          style={{ display: "flex", cursor: user?.role === "ADMIN" ? "pointer" : "default" }}
+          onClick={() => {
+            if (user?.role === "ADMIN") {
+              navigate(`/product/update/${id}`);
+            }
+          }}
+        >
         <img
           className="left-column-img"
           src={imageUrl}
@@ -100,7 +111,7 @@ const Product = () => {
 
           <div className="product-price">
             <span style={{ fontSize: "2rem", fontWeight: "bold" }}>
-              {"$" + product.price}
+              {"ron" + product.price}
             </span>
             <button
               className={`cart-btn ${
@@ -129,41 +140,43 @@ const Product = () => {
             </h6>
           
           </div>
-          <div className="update-button" style={{ display: "flex", gap: "1rem" }}>
-            <button
-              className="btn btn-primary"
-              type="button"
-              onClick={handleEditClick}
-              style={{
-                padding: "1rem 2rem",
-                fontSize: "1rem",
-                backgroundColor: "#007bff",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Update
-            </button>
-            {/* <UpdateProduct product={product} onUpdate={handleUpdate} /> */}
-            <button
-              className="btn btn-primary"
-              type="button"
-              onClick={deleteProduct}
-              style={{
-                padding: "1rem 2rem",
-                fontSize: "1rem",
-                backgroundColor: "#dc3545",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Delete
-            </button>
-          </div>
+          {user?.role === "ADMIN" && (
+                  <div className="update-button" style={{ display: "flex", gap: "1rem" }}>
+                    <button
+                      className="btn btn-primary"
+                      type="button"
+                      onClick={handleEditClick}
+                      style={{
+                        padding: "1rem 2rem",
+                        fontSize: "1rem",
+                        backgroundColor: "#007bff",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Update
+                    </button>
+                    <button
+                      className="btn btn-primary"
+                      type="button"
+                      onClick={deleteProduct}
+                      style={{
+                        padding: "1rem 2rem",
+                        fontSize: "1rem",
+                        backgroundColor: "#dc3545",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
+
         </div>
       </div>
     </>

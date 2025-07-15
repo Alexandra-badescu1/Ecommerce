@@ -14,6 +14,7 @@ const AppContext = createContext({
   clearCart: () => {},
 });
 
+
 export const AppProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [isError, setIsError] = useState("");
@@ -25,11 +26,34 @@ export const AppProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(userData));
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("cart");
-  };
+  // ... alte hooks și funcții
+const logout = () => {
+  setUser(null);
+  localStorage.removeItem("user");
+  localStorage.removeItem("cart");
+};
+
+const addToCart = (product) => {
+  setCart((prevCart) => {
+    const updatedCart = [...prevCart, product];
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    return updatedCart;
+  });
+};
+
+const removeFromCart = (productId) => {
+  setCart((prevCart) => {
+    const updatedCart = prevCart.filter((item) => item.id !== productId);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    return updatedCart;
+  });
+};
+
+const clearCart = () => {
+  setCart([]);
+  localStorage.removeItem("cart");
+};
+
 
   const refreshData = async () => {
     try {

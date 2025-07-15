@@ -3,6 +3,8 @@ package ecom_project.demo.Model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -44,4 +46,8 @@ public class User {
             this.username = (firstName + lastName).toLowerCase().replaceAll("\\s+", "");
         }
     }
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
+
 }

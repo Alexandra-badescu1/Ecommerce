@@ -45,6 +45,23 @@ const Home = ({ selectedCategory }) => {
       fetchImagesAndUpdateProducts();
     }
   }, [data]);
+  useEffect(() => {
+  // Injectează configurarea și scriptul Chatling doar o dată
+  if (!document.getElementById("chtl-script")) {
+    const configScript = document.createElement("script");
+    configScript.innerHTML = 'window.chtlConfig = { chatbotId: "4636119147" };';
+    document.body.appendChild(configScript);
+
+    const chatScript = document.createElement("script");
+    chatScript.src = "https://chatling.ai/js/embed.js";
+    chatScript.async = true;
+    chatScript.setAttribute("data-id", "4636119147");
+    chatScript.id = "chtl-script";
+    chatScript.type = "text/javascript";
+    document.body.appendChild(chatScript);
+  }
+}, []);
+
 
   const filteredProducts = selectedCategory
     ? products.filter((product) => product.category === selectedCategory)

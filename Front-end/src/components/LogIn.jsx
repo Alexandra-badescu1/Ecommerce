@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import AppContext from "../Context/Context"; // 🔁 Import AppContext
 
 const LogIn = () => {
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-  });
+  const [user, setUser] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
-  const navigate = useNavigate(); // Hook pentru navigare
+  const navigate = useNavigate();
+
+  const { login } = useContext(AppContext); // ✅ Use login from context
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,11 +23,18 @@ const LogIn = () => {
         password: user.password,
       });
 
+      // ✅ Apelează login din context pentru a actualiza starea globală
+      const userData = {
+        email: response.data.email,
+        role: response.data.role,
+        token: response.data.token,
+      };
+
+      login(userData); // ⬅️ actualizează contextul
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("role", response.data.role);
 
-      // Redirecționează utilizatorul în funcție de rol
-      if (response.data.role === "Antreprenor" || response.data.role === "Manager") {
+      if (response.data.role === "ENTREPRENEUR" || response.data.role === "ADMIN") {
         navigate("/add_product");
       } else {
         navigate("/");
@@ -37,6 +44,10 @@ const LogIn = () => {
       console.error("Login failed", error);
     }
   };
+
+  // restul rămâne la fel
+
+
 
   return (
     <div className="login-container">

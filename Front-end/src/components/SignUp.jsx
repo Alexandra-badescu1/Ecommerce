@@ -6,9 +6,11 @@ const SignUp = () => {
     firstName: "",
     lastName: "",
     email: "",
-    password: ""
+    password: "",
+    confirmPassword: ""
   });
 
+  const [roleCode, setRoleCode] = useState(""); // New field for the code
   const [imageFile, setImageFile] = useState(null);
 
   const handleChange = (e) => {
@@ -20,16 +22,33 @@ const SignUp = () => {
     setImageFile(e.target.files[0]);
   };
 
+  const handleRoleCodeChange = (e) => {
+    setRoleCode(e.target.value);
+  };
+
+  const determineRole = (code) => {
+    if (code === "#ADMIN") return "ADMIN";
+    if (code === "#Antreprenor") return "ENTREPRENEUR";
+    return "USER"; // Default role
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-  
-    // Exclude confirmPassword înainte de a trimite datele
+
+    if (user.password !== user.confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    const role = determineRole(roleCode);
+
     const { confirmPassword, ...userWithoutConfirm } = user;
-  
-    formData.append("product", JSON.stringify(userWithoutConfirm));
+    const userWithRole = { ...userWithoutConfirm, role };
+
+    const formData = new FormData();
+    formData.append("product", JSON.stringify(userWithRole));
     formData.append("imageFile", imageFile);
-  
+
     try {
       const response = await axios.post(
         "http://localhost:8080/api/user/signup",
@@ -38,7 +57,7 @@ const SignUp = () => {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-  
+
       alert("User registered successfully!");
       console.log("Response:", response.data);
     } catch (error) {
@@ -46,7 +65,6 @@ const SignUp = () => {
       alert("Failed to sign up. Please try again.");
     }
   };
-  
 
   return (
     <div className="signup-container">
@@ -76,6 +94,16 @@ const SignUp = () => {
           <div className="col-md-8">
             <label className="form-label"><h6>Profile Picture</h6></label>
             <input className="form-control" type="file" onChange={handleImageChange} name="imageFile" required />
+          </div>
+          <div className="col-md-4">
+            <label className="form-label"><h6>Role Code (optional)</h6></label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="#ADMIN or #Antreprenor"
+              value={roleCode}
+              onChange={handleRoleCodeChange}
+            />
           </div>
           <div className="col-12">
             <button type="submit" className="btn btn-primary">Sign Up</button>

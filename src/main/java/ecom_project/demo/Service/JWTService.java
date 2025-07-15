@@ -19,12 +19,11 @@ import java.util.function.Function;
 @Service
 public class JWTService {
 
-    private String secretkey= "";
+    private final String secretkey = "VGhpcyBpcyBhIHZlcnkgc2VjdXJlIGtleSBvZiAzMiBieXRlcw=="; // Base64 encoded 32 bytes
 
-    public JWTService() throws NoSuchAlgorithmException {
-        KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
-        SecretKey secretKey = keyGenerator.generateKey();
-        secretkey = Base64.getEncoder().encodeToString(secretKey.getEncoded());
+    private SecretKey getkey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secretkey);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generateToken(String username) {
@@ -36,12 +35,6 @@ public class JWTService {
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))  // Folosește `setExpiration()`
                 .signWith(getkey())
                 .compact();
-    }
-
-
-    private SecretKey getkey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretkey);
-        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String extractUsername(String token) {
