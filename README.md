@@ -34,9 +34,13 @@ Security: Spring Security with JWT-based authentication
 Frontend: React 
 <img width="1903" height="839" alt="Screenshot 2025-07-16 152415" src="https://github.com/user-attachments/assets/c903b288-f6b8-47b2-88fd-b7d5f4f1433a" />
 <img width="1914" height="834" alt="Screenshot 2025-07-16 152356" src="https://github.com/user-attachments/assets/5f0b84db-318a-4c42-ae7a-e29aff05c749" />
-
+Here is the diference between I am log in and logout as an admin.
 <img width="1884" height="892" alt="Screenshot 2025-07-16 152148" src="https://github.com/user-attachments/assets/8e1b4410-4c10-4680-b4da-e1ecf8403eb1" />
 <img width="1875" height="906" alt="Screenshot 2025-07-16 152524" src="https://github.com/user-attachments/assets/c2d3a4ea-b032-4ab8-86a5-9d0b394c6ba4" />
+
+the product can be update ,delete ,add just when I am login as an administrator
+<img width="1874" height="894" alt="Screenshot 2025-07-16 152641" src="https://github.com/user-attachments/assets/231eb206-d705-4b75-9a5b-d5bc322d86e4" />
+<img width="1863" height="899" alt="Screenshot 2025-07-16 152657" src="https://github.com/user-attachments/assets/0f80df64-0090-4c3e-b089-aa206dd568ef" />
 
 
 Database: H2
